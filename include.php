@@ -9,6 +9,7 @@ define('GOOGLE_ROOT', 'path/to/files/on/google/drive/');
 define('LOCAL_ROOT', 'path/to/files/on/local/git/repo/');
 define('STORY_SUFFIX', '/story content');
 define('UI_SUFFIX', '/ui content');
+define('WEBHOOK_SECRET', 'your_webhook_secret_goes_here');
 
 //Define all the languages you want to watch files for
 $languages = array(
@@ -52,6 +53,7 @@ $languages = array(
 
 //Define all the files that exist in your project
 $files = array(
+	"achievements.tsv",
 	"scripts.tsv",
 	"journal.tsv",
 	"achievements.tsv",
@@ -78,14 +80,26 @@ $watchlist = getWatchList($languages, $files, $story);
 set_include_path(get_include_path() . PATH_SEPARATOR . GOOGLE_API_PATH);
 require GOOGLE_API_PATH .'/../vendor/autoload.php';
 
-function getGoogleClient() {
+function getGoogleClient($cwd) {
+	
+   if($cwd == NULL) $cwd = "";
+   
+   if($cwd == "")
+   {
+	   $credPath = CREDENTIAL_PATH;
+   }
+   else
+   {
+	   $credPath = $cwd . DIRECTORY_SEPARATOR . CREDENTIAL_PATH;
+   }
+	
    // Get the API client and construct the service object.
    $scopes = array('https://www.googleapis.com/auth/drive');
    
    $client = new Google_Client();
    
    $client->setScopes($scopes);
-   $client->setAuthConfig(CREDENTIAL_PATH);
+   $client->setAuthConfig($credPath);
    
    if ($client->isAccessTokenExpired()) {
       $client->refreshTokenWithAssertion();
@@ -172,17 +186,21 @@ function getFolderPath($id, $names, $parents)
 	return $returnStr;
 }
 
-function compareTSV($a, $b)
+function compareTSV($a, $b, $cwd)
 {
 	if($a == $b) return true;
 	
+	if($cwd == NULL) $cwd = '';
+	
 	$local = fopen("__TEMP__A__.tsv", 'w');
-	fwrite($local, $content);
+	fwrite($local, $a);
 	fclose($local);
 	$local = fopen("__TEMP__B__.tsv", 'w');
-	fwrite($local, $content);
+	fwrite($local, $b);
 	fclose($local);
-	$result = runCommand('java -jar tsvCompare.jar __TEMP__A__.tsv __TEMP__B__.tsv','');
+	$result = runCommand('java -jar tsvCompare.jar __TEMP__A__.tsv __TEMP__B__.tsv',$cwd);
+	
+	echo("compare TSV result = " . $result . "\n");
 	
 	unlink("__TEMP__A__.tsv");
 	unlink("__TEMP__B__.tsv");
@@ -193,23 +211,154 @@ function compareTSV($a, $b)
 	return false;
 }
 
-function csv2tsv($content)
+function csv2tsv($content, $cwd)
 {
 	//convert Google Sheets CSV file into Firetongue-compatible TSV file
-	$local = fopen("__TEMP__.csv", 'w');
-	fwrite($local, $content);
-	fclose($local);
-	echo(runCommand('java -jar csv2tsv.jar __TEMP__.csv __TEMP__.tsv',''));
 	
-	$localContents = '';
-	$local = @fopen("__TEMP__.tsv", 'r');
-	while(is_resource($local) && !feof($local)) {
-		$localContents .= fread($local, 1024);
+	if($cwd == NULL)
+	{
+		$cwd = '';
 	}
-	@fclose($local);
 	
-	unlink("__TEMP__.csv");
-	unlink("__TEMP__.tsv");
+	$localTSV = "";
+	$localCSV = "";
+	
+	if($cwd == '')
+	{
+		$localTSV = "__TEMP__.tsv";
+		$localCSV = "__TEMP__.csv";
+	}
+	else
+	{
+		$localTSV = $cwd . DIRECTORY_SEPARATOR . "__TEMP__.tsv";
+		$localCSV = $cwd . DIRECTORY_SEPARATOR . "__TEMP__.csv";
+	}
+	
+	writeFileData($localCSV, $content);
+	
+	echo(runCommand('java -jar csv2tsv.jar __TEMP__.csv __TEMP__.tsv',$cwd));
+	
+	$localContents = readFileData($localTSV);
+	
+	unlink($localCSV);
+	unlink($localTSV);
 	
 	return $localContents;
+}
+
+function tsv2csv($content, $cwd)
+{
+	//convert Firetongue-compatible TSV file into Google Sheets CSV file
+	
+	if($cwd == NULL) $cwd = '';
+	
+	$localTSV = "";
+	$localCSV = "";
+	
+	if($cwd == "")
+	{
+		$localTSV = "__TEMP__.tsv";
+		$localCSV = "__TEMP__.csv";
+	}
+	else
+	{
+		$localTSV = $cwd . DIRECTORY_SEPARATOR . "__TEMP__.tsv";
+		$localCSV = $cwd . DIRECTORY_SEPARATOR . "__TEMP__.csv";
+	}
+	
+	writeFileData($localTSV, $content);
+	
+	echo(runCommand('java -jar csv2tsv.jar __TEMP__.tsv __TEMP__.csv -reverse',$cwd));
+	
+	$localContents = readFileData($localCSV);
+	
+	unlink($localCSV);
+	unlink($localTSV);
+	
+	return $localContents;
+}
+
+function findFolders($service)
+{
+	$folders = array();
+	$folderNames = array();
+	$folderParents = array();
+	
+	//Find ALL the folders this google drive user has access to
+	$optParams = array(
+		'q' => "mimeType = 'application/vnd.google-apps.folder'"
+	);
+	$searchResults = $service->files->listFiles($optParams);
+	
+	$getParams = array(
+		'fields' => "name, parents"
+	);
+
+	if (count($searchResults->getFiles())) {
+		foreach ($searchResults->getFiles() as $file) {
+			//record folder names & basic parent information
+			$fileId = $file->getId();
+			$result = $service->files->get($fileId, $getParams);
+			$resultName = $result->name;
+			$resultParent = $result->parents[0];
+			$folders[$resultName] = $fileId;
+			$folderNames[$fileId] = $resultName;
+			$folderParents[$fileId] = array(
+				0 => $resultParent
+			);
+		}
+		
+		//loop over each folder and figure out what its parents are, if any
+		foreach($folders as $folderId) {
+			$parents = $folderParents[$folderId];
+			$numParents = count($parents);
+			$topParent = $parents[($numParents-1)];
+			
+			if($topParent != "" && $topParent != NULL) {
+				$match = true;
+				while ($match) {
+					$match = false;
+					foreach($folders as $otherFolderId) {
+						if($folderId != $otherFolderId && $topParent != "" && $topParent != NULL) {
+							if($otherFolderId == $topParent)
+							{
+								$otherParentZero = $folderParents[$otherFolderId][0];
+								
+								if($otherParentZero != "" && $otherParentZero != NULL)
+								{
+									$folderParents[$folderId][$numParents] = $otherParentZero;
+									
+									$topParent = $folderParents[$folderId][$numParents];
+									$numParents = $numParents + 1;
+									$match = true;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		return array(
+			"folders"       => $folders,
+			"folderNames"   => $folderNames,
+			"folderParents" => $folderParents,
+		);
+	}
+}
+
+function readFileData($path)
+{
+	$contents = "";
+	$file = @fopen($path, 'r');
+	while(is_resource($file) && !feof($file)) $contents .= @fread($file, 1024);
+	@fclose($file);
+	return $contents;
+}
+
+function writeFileData($path, $contents)
+{
+	$file = @fopen($path, 'w');
+	@fwrite($file, $contents);
+	@fclose($file);
 }
