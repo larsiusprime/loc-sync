@@ -1,7 +1,7 @@
 <?php
-require_once('../../dqloc/include.php');
+require_once('path/to/include.php');
 
-define('DQLOC_PREFIX', '../../dqloc');
+define('LOC_PREFIX', 'path/to');
 
 $body = file_get_contents("php://input"); // contents of webhook payload
 
@@ -45,13 +45,13 @@ else
 			 
 					 $log .= "New version of ". $listfile['local_file'] ." committed at ". date('Y m d H:i:s') .". URL: ". $remoteUrl ."\n";
 					
-					 $localPath = DQLOC_PREFIX . DIRECTORY_SEPARATOR . $listfile['local_path'] . DIRECTORY_SEPARATOR . $listfile['local_file'];
+					 $localPath = LOC_PREFIX . DIRECTORY_SEPARATOR . $listfile['local_path'] . DIRECTORY_SEPARATOR . $listfile['local_file'];
 					
 					 $localContents = readFileData($localPath);
 					 
 					 $remoteContents = readFileData($remoteUrl);
 					 
-					 if (true || compareTSV($localContents, $remoteContents, DQLOC_PREFIX) == false) {
+					 if (true || compareTSV($localContents, $remoteContents, LOC_PREFIX) == false) {
 						
 						$log .= "   TSV's do not match\n";
 						
@@ -59,7 +59,7 @@ else
 						writeFileData($localPath, $remoteContents);
 						
 						// Upload to Google Sheets
-						$client = getGoogleClient(DQLOC_PREFIX);
+						$client = getGoogleClient(LOC_PREFIX);
 
 						$service = new Google_Service_Drive($client);
 						
@@ -107,7 +107,7 @@ else
 							}
 						}
 						
-						$csvContents = tsv2csv($remoteContents, DQLOC_PREFIX);
+						$csvContents = tsv2csv($remoteContents, LOC_PREFIX);
 						
 						$file = new Google_Service_Drive_DriveFile();
 						$file->setName($listfile['google_title']);
@@ -162,7 +162,7 @@ else
 }
 
 if (LOG_ENABLE && !empty($log)) {
-   $h = fopen(DQLOC_PREFIX . DIRECTORY_SEPARATOR . "githook.log", "a");
+   $h = fopen(LOC_PREFIX . DIRECTORY_SEPARATOR . "githook.log", "a");
    fwrite($h, $log ."\n");
 }
 
