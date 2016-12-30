@@ -159,13 +159,14 @@ Server:
  - csv2tsv can also be run in reverse to transform TSV format to CSV.
  - tsvCompare takes two filenames as input, attempts to load & parse them both as TSV, and compare on a cell-by-cell basis. This will ignore any spurious differences (endline style, etc) that does not result in any actual difference on the cell level
 
-3. The CSV format used by csv2tsv is specifically the one that Google Sheets exports. Near as I can tell it behaves like this:
+3. The CSV format used by csv2tsv is specifically the one that Google Sheets exports. As near as I can tell, it behaves like this:
  - cells are separated by a single comma (0x2C in UTF-8)
  - cells that contain a comma are *quoted*
  - cells that contain a quotation mark (0x22 in UTF-8) are *quoted*
  - all other cells are *unqouted*
  - *quoted* cells begin and end with a quotation mark character
  - any quotation marks found inside of cells are escaped by doubling them: `"` becomes `""`
+ - you don't really have to worry about this CSV stuff as it's all done internally, but it's here for completeness' sake
  - Examples:
  
  |John Smith|Dwayne "The Rock" Johnson|Fred Savage|
