@@ -14,6 +14,7 @@ by [Adam Perry](https://www.twitter.com/hoursgoby) and [Lars Doucet](https://www
 - Translators prefer cloud storage like google drive over git
 - Programmers like me prefer git for robust version control & change history
 - Programmers like me sometimes make tweaks to localization files directly in the raw text form
+- You might want to present translators with a slightly different organization of files than you use in your game (separating UI files from Story files, for instance, in case you just want to do a partial translation or something)
 - Loc-sync keeps all localization files in "one" place to cut down on duplication errors
 - Loc-sync ensures everything is always in UTF-8 format
 - Loc-sync ensures everything is always in [Firetongue](https://github.com/larsiusprime/firetongue) compatible TSV files
@@ -22,6 +23,11 @@ by [Adam Perry](https://www.twitter.com/hoursgoby) and [Lars Doucet](https://www
 ---------------------
 
 # Instructions
+
+This might seem a little intimidating at first, but it all boils down to a few simple things:
+* Set up an account or two
+* Put files in the right place
+* Change some settings to match your project
 
 ## Repository & Google Drive setup
 
