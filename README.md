@@ -145,7 +145,7 @@ Server:
 
 # Notes
 
-1. For sanity's sake, this project imposes certain formatting restrictions.
+* For sanity's sake, this project imposes certain formatting restrictions.
 
 - UTF-8 *only*. Any other format is not guaranteed to work and in fact *probably won't*.
 - TSV files *only*. 
@@ -154,12 +154,12 @@ Server:
   - If you want a Tab character in the middle of a cell, tough. Use some replaceable token instead.
   - If you want an endline character in the middle of a cell, tough. Use some replaceable token instead.
   
-2. This project depends on two `.jar` files -- `csv2tsv.jar` and `tsvCompare.jar` to perform certain high-precision UTF-8 text manipulation tasks. These binaries are included in this distro, but you can also compile them from source yourself if you want using Haxe and the hxjava library.
+* This project depends on two `.jar` files -- `csv2tsv.jar` and `tsvCompare.jar` to perform certain high-precision UTF-8 text manipulation tasks. These binaries are included in this distro, but you can also compile them from source yourself if you want using Haxe and the hxjava library.
  - csv2tsv takes two filenames as input, and attempts to load the first file, parse it as CSV, transform it to TSV, and output to the second filename.
  - csv2tsv can also be run in reverse to transform TSV format to CSV.
  - tsvCompare takes two filenames as input, attempts to load & parse them both as TSV, and compare on a cell-by-cell basis. This will ignore any spurious differences (endline style, etc) that does not result in any actual difference on the cell level
 
-3. The CSV format used by csv2tsv is specifically the one that Google Sheets exports. As near as I can tell, it behaves like this:
+* The CSV format used by csv2tsv is specifically the one that Google Sheets exports. As near as I can tell, it behaves like this:
  - cells are separated by a single comma (0x2C in UTF-8)
  - cells that contain a comma are *quoted*
  - cells that contain a quotation mark (0x22 in UTF-8) are *quoted*
