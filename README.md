@@ -187,4 +187,4 @@ Server:
  Columbo,"Murder, She Wrote",Matlock
  ```
 
-* There's currently a bug where if you add a new file in Github, loc-sync is not able to *create* a new one on Google Drive. If all you need to do is *modify* existing files, and you have a a file up on both Github and Google Drive, the sync works perfectly. So the workaround for now is just to do a manual setup of all the files you need once, and let loc-sync keep them in sync thereafter.
+* There's currently a bug where if you add a new file in Github, loc-sync is not able to automatically *create* a new one on Google Drive. If all you need to do is *modify* existing files, and you have a a file up on both Github and Google Drive, the sync works perfectly. So the workaround for now is just to do a manual setup of all the files you need once, and let loc-sync keep them in sync thereafter.
