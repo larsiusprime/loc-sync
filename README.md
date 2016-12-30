@@ -1,6 +1,7 @@
 # loc-sync
 A tool that synchronizes localization files between Google Sheets and a Git repository.
 
+by [Adam Perry](https://www.twitter.com/hoursgoby) and [Lars Doucet](https://www.github.com/larsiusprime)
 
 **What it does:**
 
