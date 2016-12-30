@@ -12,10 +12,11 @@ A tool that synchronizes localization files between Google Sheets and a Git repo
 - Translators prefer to work directly in spreadsheets rather than raw text editors
 - Translators prefer cloud storage like google drive over git
 - Programmers like me prefer git for robust version control & change history
-- Programmers like me sometimes make tweaks to localizatoin files directly in the raw text form
-- Ensure everything is always in UTF-8 format
-- Ensure everything is always in [Firetongue](https://github.com/larsiusprime/firetongue) compatible TSV files
-- Keep all localization files in "one" place to cut down on duplication errors
+- Programmers like me sometimes make tweaks to localization files directly in the raw text form
+- Loc-sync keeps all localization files in "one" place to cut down on duplication errors
+- Loc-sync ensures everything is always in UTF-8 format
+- Loc-sync ensures everything is always in [Firetongue](https://github.com/larsiusprime/firetongue) compatible TSV files
+- Loc-sync avoids spurious and/or infinite looping syncs by fully parsing the Google Sheets / Git TSV files and doing the comparison on a cell-by-cell level rather than just naively comparing the full files
 
 
 ## Repository & Google Drive setup
