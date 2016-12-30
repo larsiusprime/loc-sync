@@ -21,19 +21,6 @@ by [Adam Perry](https://www.twitter.com/hoursgoby) and [Lars Doucet](https://www
 
 ---------------------
 
-# Notes
-
-For sanity's sake, this project imposes certain formatting restrictions.
-
-- UTF-8 *only*. Any other format is not guaranteed to work and in fact *probably won't*.
-- TSV files *only*. 
-  - Cells are separated by a single Tab character (0x09 in UTF-8)
-  - Rows are terminated by an endline. Both unix (LF) & windows-style (CRLF) will work.
-  - If you want a Tab character in the middle of a cell, tough. Use some replaceable token instead.
-  - If you want an endline character in the middle of a cell, tough. Use some replaceable token instead.
-
----------------------
-
 # Instructions
 
 ## Repository & Google Drive setup
@@ -153,3 +140,41 @@ Server:
 /home/www/locsync/githook.php     <--see step 2.
 /home/google-api-php-client/      <--see step 5.
 ```
+
+---------------------
+
+# Notes
+
+1. For sanity's sake, this project imposes certain formatting restrictions.
+
+- UTF-8 *only*. Any other format is not guaranteed to work and in fact *probably won't*.
+- TSV files *only*. 
+  - Cells are separated by a single Tab character (0x09 in UTF-8)
+  - Rows are terminated by an endline. Both unix (LF) & windows-style (CRLF) will work.
+  - If you want a Tab character in the middle of a cell, tough. Use some replaceable token instead.
+  - If you want an endline character in the middle of a cell, tough. Use some replaceable token instead.
+  
+2. This project depends on two `.jar` files -- `csv2tsv.jar` and `tsvCompare.jar` to perform certain high-precision UTF-8 text manipulation tasks. These binaries are included in this distro, but you can also compile them from source yourself if you want using Haxe and the hxjava library.
+ - csv2tsv takes two filenames as input, and attempts to load the first file, parse it as CSV, transform it to TSV, and output to the second filename.
+ - csv2tsv can also be run in reverse to transform TSV format to CSV.
+ - tsvCompare takes two filenames as input, attempts to load & parse them both as TSV, and compare on a cell-by-cell basis. This will ignore any spurious differences (endline style, etc) that does not result in any actual difference on the cell level
+
+3. The CSV format used by csv2tsv is specifically the one that Google Sheets exports. Near as I can tell it behaves like this:
+ - cells are separated by a single comma (0x2C in UTF-8)
+ - cells that contain a comma are *quoted*
+ - cells that contain a quotation mark (0x22 in UTF-8) are *quoted*
+ - all other cells are *unqouted*
+ - *quoted* cells begin and end with a quotation mark character
+ - any quotation marks found inside of cells are escaped by doubling them: `"` becomes `""`
+ - Examples:
+ 
+ |John Smith|Dwayne "The Rock" Johnson|Fred Savage|
+ |---|----|---|
+ ```
+ John Smith,"Dwayne ""The Rock"" Johnson",Fred Savage
+ ```
+ |Columbo|Murder, She Wrote|Matlock|
+ |---|---|---|
+ ```
+ Columbo,"Murder, She Wrote",Matlock
+ ```
