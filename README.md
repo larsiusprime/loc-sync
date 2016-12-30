@@ -167,8 +167,9 @@ Server:
  - *quoted* cells begin and end with a quotation mark character
  - any quotation marks found inside of cells are escaped by doubling them: `"` becomes `""`
  - you don't really have to worry about this CSV stuff as it's all done internally, but it's here for completeness' sake
- - Examples:
  
+ Examples:
+  
  |John Smith|Dwayne "The Rock" Johnson|Fred Savage|
  |---|----|---|
  ```
