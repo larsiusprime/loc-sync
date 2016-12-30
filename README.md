@@ -49,8 +49,8 @@ by [Adam Perry](https://www.twitter.com/hoursgoby) and [Lars Doucet](https://www
 ## Server setup
 
 0. Obtain a linux-based web server
-   - Requires PHP (I have v 5.6.29)
-   - Requires Java (I have v 1.7.0_101)
+   - Requires PHP (I have version 5.6.29)
+   - Requires Java (I have version 1.7.0_101)
    - Requires git (I have version 2.7.3)
 1. Copy `include.php`, `poll_sheets.php` and the two `.jar` files to the same directory, doesn't need to be www-accessible 
 2. Copy `githook.php` to a www-accessible directory of your choice (should match step 3. from "file setup")
