@@ -3,6 +3,12 @@ A tool that synchronizes localization files between Google Sheets and a Git repo
 
 This way, you can have your translators work directly in spreadsheets, and share their work with you on Google Sheets, which I have found that my translators prefer, but sync to your github repository too.
 
+How it works:
+
+- Whenever github receives a push, it triggers a webhook that pushes changes by uploading them to the corresponding google sheets files.
+- Every X minutes, a remote server polls google sheets and checks for differences. If there are any, it generates a TSV file and pushes it to github.
+
+
 ## Repository & Google Drive setup
 
 1. Create a github repository to store your TSV files. [Here's mine](https://github.com/larsiusprime/defendersquest-loc) as an example.
