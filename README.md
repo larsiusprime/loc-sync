@@ -19,6 +19,22 @@ by [Adam Perry](https://www.twitter.com/hoursgoby) and [Lars Doucet](https://www
 - Loc-sync ensures everything is always in [Firetongue](https://github.com/larsiusprime/firetongue) compatible TSV files
 - Loc-sync avoids spurious and/or infinite looping syncs by fully parsing the Google Sheets / Git TSV files and doing the comparison on a cell-by-cell level rather than just naively comparing the full files
 
+---------------------
+
+# Notes
+
+For sanity's sake, this project imposes certain formatting restrictions.
+
+- UTF-8 *only*. Any other format is not guaranteed to work and in fact *probably won't*.
+- TSV files *only*. 
+  - Cells are separated by a single Tab character (0x09 in UTF-8)
+  - Rows are terminated by an endline. Both unix (LF) & windows-style (CRLF) will work.
+  - If you want a Tab character in the middle of a cell, tough. Use some replaceable token instead.
+  - If you want an endline character in the middle of a cell, tough. Use some replaceable token instead.
+
+---------------------
+
+# Instructions
 
 ## Repository & Google Drive setup
 
