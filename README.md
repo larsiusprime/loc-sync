@@ -68,13 +68,13 @@ Synchronizes localization files between Google Sheets and a Git repository.
 
 Github:
 ```
-en-US/                            <--English files
+en-US/                  <--English files
 en-US/menus.tsv
 en-US/items.tsv
 en-US/enemies.tsv
 en-US/cutscenes.tsv
 en-US/lore.tsv
-ja-JP/                            <--Japanese files
+ja-JP/                  <--Japanese files
 ja-JP/menus.tsv
 ja-JP/items.tsv
 ja-JP/enemies.tsv
@@ -93,11 +93,11 @@ myproject/English/ui content/                    <--ui files (English)
 myproject/English/ui content/menus.tsv
 myproject/English/ui content/items.tsv
 myproject/English/ui content/enemies.tsv
-myproject/Japanese                              <--Japanese files
-myproject/Japanese/story content/               <--story files (Japanese)
+myproject/Japanese                               <--Japanese files
+myproject/Japanese/story content/                <--story files (Japanese)
 myproject/Japanese/story content/cutscenes.tsv
 myproject/Japanese/story content/lore.tsv
-myproject/Japanese/ui content/                  <--ui files (Japanese)
+myproject/Japanese/ui content/                   <--ui files (Japanese)
 myproject/Japanese/ui content/menus.tsv
 myproject/Japanese/ui content/items.tsv
 myproject/Japanese/ui content/enemies.tsv
