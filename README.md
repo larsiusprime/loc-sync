@@ -1,12 +1,21 @@
 # loc-sync
 A tool that synchronizes localization files between Google Sheets and a Git repository.
 
-This way, you can have your translators work directly in spreadsheets, and share their work with you on Google Sheets, which I have found that my translators prefer, but sync to your github repository too.
 
-How it works:
+**What it does:**
 
-- Whenever github receives a push, it triggers a webhook that pushes changes by uploading them to the corresponding google sheets files.
-- Every X minutes, a remote server polls google sheets and checks for differences. If there are any, it generates a TSV file and pushes it to github.
+- Whenever github receives a push, loc-sync uploads changes to the corresponding google sheets files on google drive
+- Every X minutes, a remote server polls google sheets and checks for differences. If there are any, it pushes the changes to github as TSV files
+
+**What it's good for:**
+
+- Translators prefer to work directly in spreadsheets rather than raw text editors
+- Translators prefer cloud storage like google drive over git
+- Programmers like me prefer git for robust version control & change history
+- Programmers like me sometimes make tweaks to localizatoin files directly in the raw text form
+- Ensure everything is always in UTF-8 format
+- Ensure everything is always in [Firetongue](https://github.com/larsiusprime/firetongue) compatible TSV files
+- Keep all localization files in "one" place to cut down on duplication errors
 
 
 ## Repository & Google Drive setup
