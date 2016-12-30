@@ -64,7 +64,7 @@ Synchronizes localization files between Google Sheets and a Git repository.
   - Add a new line: `0 * * * * php /path/to/poll_sheets.php` (using your actual path, obviously)
   - That will poll Sheets hourly. If you want to poll every other hour instead, you would use `0 */2 * * *`.
 
-# example directory setup
+# example setup
 
 Github:
 ```
@@ -93,11 +93,11 @@ myproject/English/ui content/                    <--ui files (English)
 myproject/English/ui content/menus.tsv
 myproject/English/ui content/items.tsv
 myproject/English/ui content/enemies.tsv
-myproject/Japanese                 <--Japanese files
-myproject/Japanese/story content/  <--story files (Japanese)
+myproject/Japanese                              <--Japanese files
+myproject/Japanese/story content/               <--story files (Japanese)
 myproject/Japanese/story content/cutscenes.tsv
 myproject/Japanese/story content/lore.tsv
-myproject/Japanese/ui content/     <--ui files (Japanese)
+myproject/Japanese/ui content/                  <--ui files (Japanese)
 myproject/Japanese/ui content/menus.tsv
 myproject/Japanese/ui content/items.tsv
 myproject/Japanese/ui content/enemies.tsv
