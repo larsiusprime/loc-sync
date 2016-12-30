@@ -1,7 +1,9 @@
 # loc-sync
-Synchronizes localization files between Google Sheets and a Git repository.
+A tool that synchronizes localization files between Google Sheets and a Git repository.
 
-# file setup
+This way, you can have your translators work directly in spreadsheets, and share their work with you on Google Sheets, which I have found that my translators prefer, but sync to your github repository too.
+
+## Repository & Google Drive setup
 
 1. Create a github repository to store your TSV files. [Here's mine](https://github.com/larsiusprime/defendersquest-loc) as an example.
 2. Create a parallel copy of this data on google drive (sadly I don't have a way to automate this process yet)
@@ -14,12 +16,12 @@ Synchronizes localization files between Google Sheets and a Git repository.
    - Set the payload URL to something like `www.example.com/locsync/githook.php`, but on a website you actually control.
    - Pick a secret code, enter it here, and save it for use later on.
 
-# github user setup
+## Github user setup
 
 1. Create a dedicated github user with push access to your github repo
 2. [Set up an SSH key for it](https://help.github.com/articles/generating-an-ssh-key/) on the server you're going to install loc-sync on.
 
-# google user setup
+## Google user setup
 
 1. Log in to the Google account associated with your desired Google Sheets. 
 2. Browse to the Google Developers Console (https://console.developers.google.com). You may have to perform some initial setup if you've never used the Google Developers Console.
@@ -27,7 +29,7 @@ Synchronizes localization files between Google Sheets and a Git repository.
   - Under Credentials, "Create credentials," creating a service account. Generate a Service account key as JSON. Save the result.
   - Note that the resulting service account is associated with an email address (something@appspot.gserviceaccount.com). We will use this later.
 
-# server setup
+## Server setup
 
 0. Obtain a linux-based web server
    - Requires PHP (I have v 5.6.29)
@@ -59,12 +61,16 @@ Synchronizes localization files between Google Sheets and a Git repository.
   - Change the `$files` array to match the files that exist in your project
   - Change the `$story` array so that any files that count as "story" content have keys set to `TRUE` -- you don't have to explicitly mark anything else (if you don't care about the ui/story distinction just leave this array blank).
 
-8. Add a cron job for `poll_sheets.php`
+8. Edit `githook.php`:
+ - Change the path in the `require_once` call on line 2 to properly point to your `include.php`
+ - Define `LOC_PREFIX` to the relative path that gets you to `include.php`'s directory
+
+9. Add a cron job for `poll_sheets.php`
   - On the command line, type `crontab -e`
   - Add a new line: `0 * * * * php /path/to/poll_sheets.php` (using your actual path, obviously)
   - That will poll Sheets hourly. If you want to poll every other hour instead, you would use `0 */2 * * *`.
 
-# example setup
+## Example setup
 
 Github:
 ```
