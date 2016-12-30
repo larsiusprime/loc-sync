@@ -35,7 +35,7 @@ This way, you can have your translators work directly in spreadsheets, and share
    - Requires PHP (I have v 5.6.29)
    - Requires Java (I have v 1.7.0_101)
    - Requires git (I have version 2.7.3)
-1. Copy `include.php` and `poll_sheets.php` somewhere, doesn't need to be www-accessible 
+1. Copy `include.php`, `poll_sheets.php` and the two `.jar` files to the same directory, doesn't need to be www-accessible 
 2. Copy `githook.php` to a www-accessible directory of your choice (should match step 3. from "file setup")
 3. Login to your server
 4. Clone your github repository into a directory of your choice. This directory doesn't need to be www-accessible
