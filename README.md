@@ -4,8 +4,8 @@ A tool that synchronizes localization files between Google Sheets and a Git repo
 
 **What it does:**
 
-- Whenever github receives a push, loc-sync uploads changes to the corresponding google sheets files on google drive
-- Every X minutes, a remote server polls google sheets and checks for differences. If there are any, it pushes the changes to github as TSV files
+- When you push TSV files to git loc-sync updates the corresponding google sheets files on google drive
+- A remote server periodically polls google sheets and checks for differences and pushes changes to git as TSV files
 
 **What it's good for:**
 
